@@ -1,4 +1,5 @@
 # syntax=docker/dockerfile:1
+# Builder stage
 FROM golang:1.20.6-alpine as builder
 
 WORKDIR /app
@@ -8,6 +9,16 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o server ./cmd/server/main.go
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+
+RUN go build -a -installsuffix cgo -o server ./cmd/server/main.go
+
+# Final stage
+FROM alpine:latest
+
+WORKDIR /root/
+
+COPY --from=builder /app/server .
 
 CMD ["./server"]
