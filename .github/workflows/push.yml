@@ -3,7 +3,10 @@ name: Docker Build & Push
 on:
   push:
     branches:
-      - master
+      - '**'
+    pull_request:
+      branches:
+        - '**'
 
 jobs:
   build:
@@ -26,4 +29,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.actor }}/seccamp-2023-backend:latest
+          tags: |
+            ghcr.io/${{ github.actor }}/seccamp-2023-backend:latest
+            ghcr.io/${{ github.actor }}/seccamp-2023-backend:${{ github.sha }}
