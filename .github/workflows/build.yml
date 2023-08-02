@@ -1,0 +1,19 @@
+name: Docker Build
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build the Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          tags: ghcr.io/honahuku/seccamp-2023-backend
